@@ -10,8 +10,10 @@ import { mealData } from "../constants";
 import { Image } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import Loading from "./Loading";
+import { CachedImage } from "../helpers/image";
+import { useNavigation } from "@react-navigation/native";
 
-const RecipeCard = ({ item, index }) => {
+const RecipeCard = ({ item, index, navigation }) => {
   let isEven = index % 2 == 0;
   return (
     <Animated.View
@@ -27,9 +29,19 @@ const RecipeCard = ({ item, index }) => {
           paddingRight: isEven ? 8 : 0,
         }}
         className="flex justify-center mb-4 space-y-1"
+        onPress={() => navigation.navigate("RecipeDetail", { ...item })}
       >
-        <Image
+        {/* <Image
           source={{ uri: item.strMealThumb }}
+          style={{
+            width: "100%",
+            height: index % 3 == 0 ? hp(25) : hp(35),
+            borderRadius: 35,
+          }}
+          className="bg-black/5"
+        /> */}
+        <CachedImage
+          uri={item.strMealThumb}
           style={{
             width: "100%",
             height: index % 3 == 0 ? hp(25) : hp(35),
@@ -51,6 +63,7 @@ const RecipeCard = ({ item, index }) => {
 };
 
 const Recipes = ({ categories, meals }) => {
+  const navigation = useNavigation();
   return (
     <View className="mx-4 space-y-3">
       <Text
@@ -68,7 +81,9 @@ const Recipes = ({ categories, meals }) => {
             keyExtractor={(item) => item.idMeal}
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            renderItem={({ item, i }) => <RecipeCard item={item} index={i} />}
+            renderItem={({ item, i }) => (
+              <RecipeCard item={item} index={i} navigation={navigation} />
+            )}
             //   refreshing={isLoadingNext}
             //   onRefresh={() => refetch({ first: ITEM_CNT })}
             onEndReachedThreshold={0.1}

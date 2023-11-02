@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 
 import Animated from "react-native-reanimated";
-import { Image } from "expo-image";
+// import { Image } from "expo-image";
 
 // using asycn storage (does not work with android properly: disk space is low)
 export const CachedImage = (props) => {
