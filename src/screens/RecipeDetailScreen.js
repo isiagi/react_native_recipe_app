@@ -21,6 +21,8 @@ import { HeartIcon, UsersIcon } from "react-native-heroicons/solid";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import Loading from "../components/Loading";
+import YoutubePlayer from "react-native-youtube-iframe";
+import YoutubeIframe from "react-native-youtube-iframe";
 
 const RecipeDetailScreen = (props) => {
   let item = props.route.params;
@@ -63,6 +65,15 @@ const RecipeDetailScreen = (props) => {
     return indexes;
   };
 
+  const getYoutubeVideoId = (url) => {
+    const regex = /[?&]v=([^&]+)/;
+    const match = url.match(regex);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return null;
+  };
+
   return (
     <ScrollView
       className="bg-white flex-1"
@@ -81,6 +92,7 @@ const RecipeDetailScreen = (props) => {
             borderBottomRightRadius: 40,
             marginTop: 4,
           }}
+          sharedTransitionTag={item.strMeal}
         />
       </View>
       {/* Back Button */}
@@ -272,6 +284,24 @@ const RecipeDetailScreen = (props) => {
               {meal?.strInstructions}
             </Text>
           </View>
+
+          {/* recipe video */}
+          {meal.strYoutube && (
+            <View className="space-y-4">
+              <Text
+                style={{ fontSize: hp(2.5) }}
+                className="font-bold flex-1 text-neutral-700"
+              >
+                Recipe Video
+              </Text>
+              <View>
+                <YoutubeIframe
+                  videoId={getYoutubeVideoId(meal.strYoutube)}
+                  height={hp(30)}
+                />
+              </View>
+            </View>
+          )}
         </View>
       )}
     </ScrollView>
